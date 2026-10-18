@@ -1,0 +1,32 @@
+{
+  "orders": [
+    {
+      "id": "ORD-001",
+      "items": [
+        { "name": "Клавіатура", "quantity": 2, "price": 899.50 },
+        { "name": "Миша", "quantity": 1, "price": 449.99 },
+        { "name": "Килимок", "quantity": 3, "price": 129.90 }
+      ],
+      "delivery": { "address": { "city": "Київ", "street": "Хрещатик", "house": "10", "apartment": "12", "postalCode": "01001" }, "comment": null },
+      "payment": { "method": "Банківська картка", "isPaid": true },
+      "status": "Відправлено"
+    },
+    {
+      "id": "ORD-002",
+      "items": [
+        { "name": "Навушники", "quantity": 1, "price": 1250 },
+        { "name": "Кабель USB", "quantity": 2, "price": 150.25 }
+      ],
+      "delivery": { "address": { "city": "Львів", "street": "Городоцька", "house": "25", "apartment": null, "postalCode": "79000" }, "comment": "Зателефонувати перед доставкою" },
+      "payment": { "method": "Післяплата", "isPaid": false },
+      "status": "Обробляється"
+    },
+    {
+      "id": "ORD-003",
+      "items": [ { "name": "Монітор", "quantity": 1, "price": 7499.99 } ],
+      "delivery": { "address": { "city": "Одеса", "street": "Дерибасівська", "house": "8", "apartment": "4", "postalCode": "65000" }, "comment": null },
+      "payment": { "method": "Банківський переказ", "isPaid": true },
+      "status": "Доставлено"
+    }
+  ]
+}
