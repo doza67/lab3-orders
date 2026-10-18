@@ -76,6 +76,45 @@ program.command('field').description('Показати поле; вкладен�
     print(value);
   });
 
+const lineCents = item => Math.round(item.price * 100) * item.quantity;
+function totalCents(order) {
+  const total = order.items.reduce((sum, item) => sum + lineCents(item), 0);
+  if (!Number.isSafeInteger(total)) throw new Error('Сума замовлення перевищує допустиму точність.');
+  return total;
+}
+program.command('items').description('Показати позиції із сумою за кожну та сортуванням')
+  .argument('<id>', 'Ідентифікатор замовлення')
+  .addOption(new Option('-s, --sort <field>', 'Поле сортування').choices(['name', 'quantity', 'price', 'sum']).default('name'))
+  .option('-d, --desc', 'Сортувати за спаданням')
+  .action((id, options) => {
+    const rows = findOrder(id).items.map(item => ({ ...item, sum: lineCents(item) / 100 }));
+    rows.sort((a, b) => (options.sort === 'name'
+      ? a.name.localeCompare(b.name, 'uk') : a[options.sort] - b[options.sort]) * (options.desc ? -1 : 1));
+    print(rows);
+  });
+program.command('total').description('Показати загальну вартість товарів у замовленні, у гривнях')
+  .argument('<id>', 'Ідентифікатор замовлення')
+  .action(id => console.log(`Загальна сума замовлення ${id}: ${(totalCents(findOrder(id)) / 100).toFixed(2)} грн`));
+program.command('summary').description('Показати зведення доставки й оплати')
+  .argument('<id>', 'Ідентифікатор замовлення')
+  .action(id => {
+    const order = findOrder(id);
+    print({ id: order.id, delivery: order.delivery, payment: order.payment, status: order.status });
+  });
+
+for (const command of [program, ...program.commands]) {
+  command.helpOption('-h, --help', 'Показати довідку');
+  command.configureHelp({
+    formatHelp: (context, helper) => {
+      const text = Object.getPrototypeOf(helper).formatHelp.call(helper, context, helper);
+      return text.replaceAll('Usage:', 'Використання:').replaceAll('Arguments:', 'Аргументи:')
+        .replaceAll('Options:', 'Опції:').replaceAll('Commands:', 'Команди:')
+        .replaceAll('Global Options:', 'Глобальні опції:').replaceAll('[options]', '[опції]')
+        .replaceAll('[command]', '[команда]').replaceAll('default:', 'типово:').replaceAll('choices:', 'значення:');
+    }
+  });
+}
+
 try {
   if (process.argv.length === 2) program.outputHelp();
   else program.parse();
