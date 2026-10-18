@@ -30,4 +30,5 @@ npm test
 Єдина стороння залежність — commander. Тести використовують вбудовані модулі Node.js.
 Довідка commander: https://github.com/tj/commander.js
 
-Публікацію на GitHub ще не виконано. Перевірка `jq empty data.json` потребує встановленого jq.
+Публікацію на GitHub ще не виконано. JSON перевірено командою `jq empty data.json`: код 0.
+
